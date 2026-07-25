@@ -1,0 +1,23 @@
+id: '0014'
+parent: '0013'
+island: 0
+inspirations:
+- '0011'
+timestamp: '2026-06-09T14:30:00Z'
+title: Cosine schedule on hybrid
+summary: Cosine LR + monotonic features — best overall.
+description: |-
+  ## Front-runner
+
+  Adds a cosine LR schedule and the monotonic size-features idea borrowed from **0011**. Best composite and regret in the run.
+metrics:
+  composite: 0.806
+  regret: 0.104
+  constraint: 0.05
+  mae_time_s: 2.04
+  rmse: 3.95
+  r2: 0.836
+tags:
+- schedule
+- capacity
+artifacts: []

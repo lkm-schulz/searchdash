@@ -1,0 +1,2131 @@
+/* Theme-independent tokens (shared across light/dark). */
+:root {
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  /* Corner radius + padding shared by all top-level surface cards (chart, totals,
+     section, scatter). Single source so the card look stays uniform; inner tiles
+     derive their radius as (--card-radius - --card-padding) to stay concentric. */
+  --card-radius: 18px;
+  --card-padding: 12px;
+  /* Radius for elements sitting at a card's inner padding edge (tiles, controls):
+     outer radius minus padding keeps their corners concentric with the card. */
+  --card-inner-radius: calc(var(--card-radius) - var(--card-padding));
+
+  /* Uniform height for inline interactive controls (buttons, pills, selects) so a
+     control bar reads as one even row regardless of each element's font/padding. */
+  --control-height: 26px;
+
+  /* Toggle: which side the section-card title sits on for multi-section cards.
+     1 = left (leads its body), 0 = right (trails it). */
+  --section-label-left: 1;
+
+  /* Radius scale. Singletons (7px, 9px) snap to the nearest step (--radius-xs). */
+  --radius-pill: 999px;
+  --radius-lg: 14px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
+  --radius-xs: 8px;
+  --radius-2xs: 6px;
+  --radius-3xs: 4px;
+
+  /* Spacing scale (token suffix = pixels). Off-scale one-offs (7px, 17px, 64px)
+     stay raw at their use site. */
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-3: 3px;
+  --space-4: 4px;
+  --space-5: 5px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+  --space-18: 18px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-28: 28px;
+
+  /* Type scale (token suffix = pixels). Oddments (9px, 10.5px, 12.5px, 16px,
+     0.9em) stay raw at their use site. */
+  --font-size-2xs: 10px;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 13px;
+  --font-size-md: 14px;
+  --font-size-lg: 15px;
+  --font-size-xl: 18px;
+  --font-size-display: 30px;
+
+  /* Font weights. */
+  --weight-medium: 500;
+  --weight-demibold: 550;
+  --weight-semibold: 600;
+  --weight-bold: 650;
+
+  /* Motion. */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* Effects. */
+  --blur-glass: blur(6px);
+  --letter-spacing-caps: 0.04em;
+  /* Focus/highlight ring; references the per-theme accent so it flips with the theme. */
+  --shadow-highlight: 0 0 0 3px var(--accent-soft);
+  /* Legible text laid over a saturated fill (accent button, island chip, error banner). */
+  --text-on-fill: #fff;
+}
+
+/* Theme tokens. Components reference these variables only, so the light/dark
+   toggle (which flips data-theme on <html>) is the single source of truth. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e0e13;
+  --bg-gradient: radial-gradient(1200px 600px at 80% -10%, #1a1a2410, transparent), #0e0e13;
+  --surface: #16161e;
+  --surface-2: #1c1c26;
+  --border: #2a2a36;
+  --border-strong: #3a3a48;
+  --text: #e7e7ee;
+  --text-muted: #9a9aac;
+  --accent: #6ea8fe;
+  --accent-soft: #6ea8fe22;
+  --accent-2: #f0a76f;
+  --good: #4ec98a;
+  --bad: #f0726f;
+  --chart-grid: #2a2a36;
+  --highlight: #6ea8fe26;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f7fb;
+  --bg-gradient: radial-gradient(1200px 600px at 80% -10%, #6ea8fe14, transparent), #f6f7fb;
+  --surface: #ffffff;
+  --surface-2: #f0f2f7;
+  --border: #e2e5ee;
+  --border-strong: #cfd4e0;
+  --text: #1b1d27;
+  --text-muted: #5d6377;
+  --accent: #2f6fed;
+  --accent-soft: #2f6fed18;
+  --accent-2: #d9772f;
+  --good: #1f9d63;
+  --bad: #d8403c;
+  --chart-grid: #e2e5ee;
+  --highlight: #2f6fed1f;
+  --shadow: 0 6px 20px rgba(20, 30, 60, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+/* Grows with content (not capped to one viewport) so the sticky header's
+   containing block spans the full page and it stays pinned through any scroll. */
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg-gradient);
+  /* Pin the gradient to the viewport so elements that repaint it (sticky header,
+     top fade) can align to the same painting and blend seamlessly. */
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--transition-base), color var(--transition-base);
+}
+
+h1 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--weight-bold);
+  margin: 0;
+}
+
+h2 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--weight-bold);
+  margin: var(--space-28) 0 var(--space-10);
+  color: var(--text);
+}
+
+h3 {
+  font-size: var(--font-size-base);
+  font-weight: var(--weight-semibold);
+  margin: 0 0 var(--space-8);
+  color: var(--text-muted);
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Layout */
+.app {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: var(--space-20) var(--space-24) 64px;
+}
+
+/* Fades scrolling content into the page background as it passes up behind the
+   floating header, instead of letting it peek out sharply above. Solid over the
+   header zone, transparent by the point the sticky table header pins (so that
+   stays crisp). Sits below the header (z 10), above all content. */
+.top-fade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--app-header-h, 56px) + 20px);
+  /* Reproduce the page gradient (viewport-pinned), then fade its alpha out via a
+     vertical mask — so the occluding region matches the background exactly.
+     Solid down to where the table header pins (header + 8px) so rows vanish
+     cleanly behind it, then fading out before the first box (header + 20px) so it
+     never overlays box content at rest. */
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0,
+    #000 calc(var(--app-header-h, 56px) + 8px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0,
+    #000 calc(var(--app-header-h, 56px) + 8px),
+    transparent 100%
+  );
+  z-index: 9;
+  pointer-events: none;
+}
+
+/* Full-bleed top bar: spans the viewport, flush to the top with no rounded
+   corners. Content is centered to the page column by .app-header-inner. */
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  /* Above the pinned table header (z 10) so the header's shadow falls over it. */
+  z-index: 11;
+  backdrop-filter: var(--blur-glass);
+}
+
+/* Constrain the bar's content to the same centered column and side padding as
+   the page body, so it aligns with where the boxes below begin. */
+.app-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-16);
+  flex-wrap: wrap;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-24);
+}
+
+.app-title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Refresh controls + theme toggle wrap together as one unit, so the theme
+   toggle never breaks onto its own line. */
+.app-header-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  /* The header's interactive controls share one height — taller than the
+     standard --control-height — so the number field, refresh button, and theme
+     toggle line up as one even row. Anchored to the padded number input. */
+  --header-control-height: 30px;
+}
+
+/* Refresh button and theme toggle are equal-sized square icon buttons. */
+.app-header-controls .refresh-now,
+.app-header-controls .theme-toggle {
+  width: var(--header-control-height);
+  height: var(--header-control-height);
+}
+
+.app-header-controls .refresh-now {
+  padding: 0;
+}
+
+.app-datadir {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: var(--space-4);
+  background: var(--surface-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  padding: var(--space-6) var(--space-14);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: var(--weight-medium);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--control-height);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0 var(--space-12);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-weight: var(--weight-demibold);
+  transition: border-color var(--transition-fast), background var(--transition-fast), transform 0.05s ease;
+}
+
+.btn:hover {
+  border-color: var(--border-strong);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn.preset {
+  background: transparent;
+}
+
+.btn.preset:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Square icon button (the cross), so its width matches its shared control height. */
+.btn.remove {
+  width: var(--control-height);
+  padding: 0;
+  color: var(--bad);
+  border-radius: var(--card-inner-radius);
+}
+
+/* Fill the whole button red on hover; the cross flips to white for contrast. */
+.btn.remove:hover {
+  background: var(--bad);
+  border-color: var(--bad);
+  color: var(--text-on-fill);
+}
+
+.btn.add-plot {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-fill);
+  padding: 0 var(--space-14);
+  border-radius: var(--card-inner-radius);
+  font-size: var(--font-size-base);
+  font-weight: var(--weight-medium);
+}
+
+/* Refresh controls */
+.refresh-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  font-size: var(--font-size-base);
+  color: var(--text-muted);
+}
+
+.refresh-controls .checkbox,
+.refresh-controls .interval {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.refresh-controls input[type="number"] {
+  width: 56px;
+  height: var(--header-control-height);
+  padding: var(--space-4) var(--space-6);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xs);
+}
+
+.last-updated {
+  font-variant-numeric: tabular-nums;
+  min-width: 120px;
+  text-align: right;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--accent-soft);
+}
+
+/* Banners */
+.error-banner {
+  background: var(--bad);
+  color: var(--text-on-fill);
+  padding: var(--space-10) var(--space-14);
+  border-radius: var(--radius-sm);
+  margin: var(--space-12) 0;
+  font-size: var(--font-size-base);
+}
+
+.loading,
+.empty {
+  color: var(--text-muted);
+  padding: var(--space-24);
+  text-align: center;
+}
+
+/* Shared base for every top-level surface card (section/filter, totals, chart,
+   scatter, view-controls bar). Uniform fill, border, radius, padding, and shadow
+   live here; each card rule adds only its own layout and any padding override. */
+.section-card,
+.totals-card,
+.chart-card,
+.scatter-card,
+.view-controls {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  box-shadow: var(--shadow);
+}
+
+/* Card of labelled sections (shared by the metric filter and artifact card).
+   Sections sit inline on one row, wrapping to the next line only when they no
+   longer fit. Padding lives on the sections (not the card) so overflow:hidden can
+   clip the section dividers exactly at the card's inner edge. */
+.section-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Each section carries a top + left divider; adjacent sections overlap them by
+   1px (negative margins) and the card clips the ones that land on its top/left
+   edge. Net effect: a vertical bar between sections sharing a row, a horizontal
+   bar between wrapped rows, and no stray bar at a line start. */
+.section-card-section {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-12);
+  /* Grow from content size, sharing any surplus width equally between sections;
+     min-width:0 lets a wide body shrink and wrap instead of overflowing. */
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--card-padding);
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  margin-top: -1px;
+  margin-left: -1px;
+}
+
+.section-card-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-8);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Top-aligned so the label's cap height sits at the card's padding edge. */
+.section-card-label {
+  flex-shrink: 0;
+  text-align: right;
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+
+/* For multi-section cards, the title side follows the --section-label-left
+   toggle (order -1 = left, 0 = right); a lone section always trails on the right.
+   The body's flex:1 pushes the label to whichever end order leaves it. */
+.section-card-section:not(:only-child) .section-card-label {
+  order: calc(-1 * var(--section-label-left));
+}
+
+.section-card-settings {
+  gap: var(--space-10) var(--space-20);
+  font-size: var(--font-size-base);
+  color: var(--text-muted);
+}
+
+/* Match the metric-pill spacing so the Display row reads consistently with the
+   Metrics subsections above it (the artifact-card settings keep the wider gap). */
+.metric-filter .section-card-settings {
+  gap: var(--space-8);
+}
+
+/* Outer spacing for the metric filter's card. */
+.metric-filter {
+  margin-bottom: var(--space-18);
+}
+
+/* Filter icon + preset dropdown, grouped so the funnel reads as the dropdown's
+   affordance. Baseline-aligned so the dropdown text sits on the same line as the
+   sibling pills; the icon is centered against that text. */
+.preset-filter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-6);
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.preset-filter:hover {
+  color: var(--accent);
+}
+
+.preset-filter-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.preset-select {
+  background: transparent;
+  color: var(--text);
+  border: none;
+  padding: 0 var(--space-4) 0 var(--space-2);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.preset-select:hover {
+  color: var(--accent);
+}
+
+.preset-divider {
+  width: 1px;
+  height: 16px;
+  align-self: center;
+  background: var(--border);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  line-height: 1;
+  height: var(--control-height);
+  padding: 0 var(--space-8);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: var(--font-size-base);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  user-select: none;
+  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.pill:hover {
+  border-color: var(--border-strong);
+}
+
+.pill.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Drag-reorderable pill row: wraps like the plain pill row, but each pill is a
+   grab handle. The active drag lifts the pill (z-index, shadow, slight grow)
+   and dims it so the drop target reads as the gap, not the moving pill. */
+.sortable-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-8);
+}
+
+.sortable-pills .pill {
+  cursor: grab;
+}
+
+.sortable-pills .pill:active {
+  cursor: grabbing;
+}
+
+.pill.is-dragging {
+  cursor: grabbing;
+  opacity: 0.85;
+  z-index: 1;
+  box-shadow: var(--shadow);
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox input {
+  accent-color: var(--accent);
+}
+
+/* Metric charts grid */
+.metric-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: var(--space-16);
+  margin-bottom: var(--space-28);
+}
+
+/* Standard card padding, but a tight bottom since the chart carries its own
+   axis margin underneath. */
+.chart-card {
+  padding: var(--card-padding) var(--card-padding) var(--space-6);
+}
+
+.chart-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-size: var(--font-size-base);
+  font-weight: var(--weight-semibold);
+  margin: 0 0 var(--space-8);
+  color: var(--text-muted);
+  line-height: 1;
+  /* Reserve the prefix chip's rendered height (10px font × 1.4 + 2×2px padding +
+     2×1px border) so a charted title sits at the same height whether or not it
+     carries a group label — keeping every chart card the same total height. */
+  min-height: 20px;
+}
+
+/* Small prefix badge — inline before a chart title (flow mode) and as the
+   section-header label (separated mode); a muted rounded chip. */
+.chart-prefix {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-6);
+  border-radius: var(--radius-2xs);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Full-width foldable section header (separated mode): a disclosure chevron and
+   a label badge sit left of a hairline rule filling the row. Rendered as a reset
+   button so the whole row toggles the fold. Every section is headed now, so only
+   the first header drops its top gap to start flush. */
+.metric-charts-section-header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--text-muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.metric-charts-section-header:first-child {
+  margin-top: 0;
+}
+
+/* Disclosure chevron: points down when expanded, rotates to point right once the
+   section is folded. */
+.section-fold-chevron {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.metric-charts-section-header.is-folded .section-fold-chevron {
+  transform: rotate(-90deg);
+}
+
+/* As a section heading the badge is borderless — the trailing rule already
+   frames it; the border is reserved for the inline chart-title tag. */
+.metric-charts-section-header .chart-prefix {
+  border-color: transparent;
+  background: none;
+  border: none;
+}
+
+.metric-charts-section-header::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Totals card */
+/* Shared card radius (`--card-radius`) minus the base padding (12) gives the
+   inner tile radius (`.total-tile`) so corners stay concentric. */
+.totals-card {
+  margin-bottom: var(--space-28);
+}
+
+.totals-heading {
+  font-size: var(--font-size-base);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-caps);
+  margin: 0 0 var(--space-12);
+  color: var(--text-muted);
+}
+
+.totals-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-bottom: var(--space-14);
+}
+
+.totals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-14);
+}
+
+.total-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--card-inner-radius);
+  padding: var(--space-12) var(--space-14);
+}
+
+.total-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.total-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-demibold);
+  color: var(--text-muted);
+}
+
+.total-chip {
+  flex: none;
+  font-size: var(--font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-caps);
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: var(--space-1) 7px;
+  border-radius: var(--radius-pill);
+}
+
+.total-value {
+  font-size: var(--font-size-display);
+  font-weight: var(--weight-bold);
+  line-height: 1.05;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.total-dist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  margin-top: var(--space-2);
+  padding-top: var(--space-10);
+  border-top: 1px solid var(--border);
+}
+
+.dist-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dist-key {
+  font-size: var(--font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-caps);
+  color: var(--text-muted);
+}
+
+.dist-val {
+  font-size: var(--font-size-sm);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Iteration list */
+.iteration-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.iteration-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-slow), background var(--transition-slow);
+}
+
+.iteration-item:hover {
+  border-color: var(--border-strong);
+}
+
+.iteration-link {
+  display: block;
+  padding: var(--space-12) var(--space-16);
+  text-decoration: none;
+  color: inherit;
+}
+
+.iteration-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-10);
+}
+
+.iteration-id {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.iteration-title {
+  font-weight: var(--weight-semibold);
+}
+
+.iteration-time {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.iteration-summary {
+  color: var(--text-muted);
+  font-size: var(--font-size-base);
+  margin: var(--space-4) 0 var(--space-8);
+}
+
+.metric-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-10);
+  font-size: var(--font-size-sm);
+}
+
+.chip-key {
+  color: var(--text-muted);
+}
+
+.chip-val {
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+}
+
+/* Iteration table (hybrid sortable design) */
+/* Frame anchoring the fade overlays; the page handles vertical scroll, the two
+   inner scrollers handle horizontal. */
+.iteration-table {
+  position: relative;
+  /* Shared fixed column widths; the header and body grids both read these, so
+     their tracks line up exactly regardless of label or value length. */
+  --info-col-w: 300px;
+  --metric-col-w: 104px;
+  /* Trailing sort-arrow slot; body num cells mirror it as right padding so
+     numbers align with the header label's right edge. */
+  --sort-slot-w: 0.75em;
+  --sort-gutter: calc(var(--sort-slot-w) + var(--space-4));
+}
+
+/* Header scroller: pinned under the sticky app-header during page scroll. Not
+   user-scrollable (overflow hidden) — it only mirrors the body's horizontal
+   position via JS, so it can never be a competing scroll source. */
+.table-head-scroll {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  position: sticky;
+  top: calc(var(--app-header-h, 56px) + 8px);
+  /* Above the top fade so the pinned header stays crisp while content fades
+     behind it; it does not overlap the app-header, so sharing its layer is safe. */
+  z-index: 10;
+  /* Same gradient as the page, pinned to the viewport, so the header is
+     indistinguishable from the background rather than a floating panel. */
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+}
+
+/* Body scroller: horizontal scroll only; vertical content flows to the page so
+   there is no nested vertical scroll. */
+.table-body-scroll {
+  overflow-x: auto;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Both grids size to their content so columns drive horizontal scroll, but stay
+   at least pane-wide so row backgrounds fill it when columns are few. */
+.table-head,
+.table-body {
+  width: max-content;
+  min-width: 100%;
+}
+
+.table-head {
+  display: grid;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-4) 17px var(--space-8);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Right/left "more columns" affordance: a gradient to the page background over
+   the pane edges, toggled by useScrollEdges so it shows only when content is
+   hidden that way. */
+.table-edge-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 56px;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.table-edge-fade.right {
+  right: 0;
+  border-radius: 0 0 var(--radius-lg) 0;
+  background: linear-gradient(to right, transparent, var(--bg));
+}
+
+.table-edge-fade.left {
+  left: 0;
+  border-radius: 0 0 0 var(--radius-lg);
+  background: linear-gradient(to left, transparent, var(--bg));
+}
+
+.table-th {
+  border: none;
+  background: transparent;
+  padding: var(--space-2) 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+  cursor: pointer;
+  /* Flex so the reserved sort-indicator slot sits left of the label and stays
+     vertically centered with it; the label still wraps within the column. */
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  /* Wrap long labels within the fixed column, preferring the soft breaks after
+     underscores (see labelWithBreaks); only split mid-token as a last resort. */
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.25;
+  transition: color var(--transition-fast);
+}
+
+/* Always-present trailing slot for the active-sort arrow: keeps the label from
+   shifting when the arrow appears. Width holds the arrow glyph; body num cells
+   reserve a matching right gutter (--sort-gutter) so numbers stay aligned with
+   the label's right edge. */
+.sort-indicator {
+  flex: none;
+  width: var(--sort-slot-w);
+  text-align: center;
+  font-size: 0.85em;
+}
+
+.table-th.info {
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.table-th.num {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.table-th.sortable:hover {
+  color: var(--accent);
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-top: var(--space-8);
+}
+
+.table-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-slow), background var(--transition-slow);
+}
+
+.table-row:hover {
+  border-color: var(--border-strong);
+}
+
+.table-row-link {
+  display: grid;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-10) var(--space-16);
+  text-decoration: none;
+  color: inherit;
+}
+
+.table-col-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* Zero the item's max-content contribution so a long title never inflates the
+     flexible info track past its floor: on overflow the table sizes to
+     max-content and an fr track would otherwise grow to fit the title in rows
+     while the header (only the "Iteration" label) stays at the floor, mis-
+     aligning columns. min-width:100% still fills whatever the track resolves to,
+     so the title uses any surplus when columns are few and ellipsizes past it. */
+  width: 0;
+  min-width: 100%;
+}
+
+.table-info-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.table-info-head .iteration-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The card design pushes the timestamp right via margin-left:auto; in the
+   table it sits left-aligned beneath the id/title instead. */
+.table-col-info .iteration-time {
+  margin-left: 0;
+}
+
+.table-cell.num {
+  text-align: right;
+  /* Mirror the header's trailing sort-arrow gutter so number right-edges align
+     with the label right-edge above them. */
+  padding-right: var(--sort-gutter);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+  font-size: var(--font-size-base);
+}
+
+/* Scatter tab */
+.scatter-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: var(--space-16);
+}
+
+.scatter-card-controls {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-16);
+  margin-bottom: var(--space-12);
+}
+
+/* x/y selectors stack vertically (and the selects themselves shrink at the very
+   end) when the card is too narrow, so the actions group never has to leave the
+   top row. min-width:0 lets the axes box — and its selects — shrink below content
+   width and stack/truncate instead of overflowing into the actions (the overlap). */
+.scatter-card-axes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+  min-width: 0;
+}
+
+/* Pills + remove stay together, top-right, never wrapping to their own row. Gap
+   matches the pill spacing used in the metric filter / view-controls bars. */
+.scatter-card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex: 0 0 auto;
+}
+
+.scatter-card-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  color: var(--text-muted);
+  /* Shrink (and let the select truncate) instead of overflowing the axes box. */
+  min-width: 0;
+}
+
+/* Only used for the scatter plot-card controls, which sit at the card's inner
+   padding edge — so their radius is concentric with the card corner. */
+select {
+  max-width: 160px;
+  min-width: 0;
+  height: var(--control-height);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--card-inner-radius);
+  padding: 0 var(--space-8);
+  cursor: pointer;
+}
+
+/* Detail page */
+.detail-page {
+  padding: 0;
+}
+
+.detail-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  padding: var(--space-24) 0 var(--space-16);
+  border-bottom: 1px solid var(--border);
+  transition: padding var(--transition-base), box-shadow var(--transition-base);
+}
+
+.detail-header-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 var(--space-24);
+}
+
+.detail-body {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-24);
+  padding-top: var(--space-16);
+}
+
+.detail-header.compact {
+  padding-top: var(--space-10);
+  padding-bottom: var(--space-10);
+  box-shadow: var(--shadow);
+}
+
+.detail-header.compact h1,
+.detail-header.compact .detail-meta,
+.detail-header.compact .detail-lineage,
+.detail-header.compact .detail-tags,
+.detail-header.compact .back-link {
+  display: none;
+}
+
+.detail-header-compact-title {
+  display: none;
+  font-weight: var(--weight-semibold);
+}
+
+.detail-header.compact .detail-header-compact-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+/* Title span absorbs overflow (ellipsizes) so fixed siblings — back link,
+   top button — never get clipped at the container edge. */
+.detail-header-compact-title .compact-title-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-header-compact-title .back-link-compact,
+.detail-header-compact-title .compact-top {
+  flex-shrink: 0;
+}
+
+/* Compact metric: inline-flex sub-container (mirrors `.chip`'s layout seam)
+   with its own tight gap so label/value spacing is independent of the row gap.
+   A `|` separates it from the title; a `:` follows the label. Fixed width —
+   the label swaps to its initials (JS) to reclaim space when the title would
+   overflow, rather than flex-shrinking. */
+.detail-header-compact-title .compact-metric {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  flex-shrink: 0;
+}
+
+.detail-header-compact-title .compact-metric::before {
+  content: "|";
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.detail-header-compact-title .compact-metric .chip-key {
+  white-space: nowrap;
+}
+
+.detail-header-compact-title .compact-metric .chip-key::after {
+  content: ":";
+}
+
+.detail-header-compact-title .compact-metric .chip-val {
+  flex-shrink: 0;
+}
+
+/* Off-screen measurement spans (full vs. abbreviated label) feeding the
+   hysteresis that collapses the metric label to initials. */
+.compact-metric-ghost {
+  position: absolute;
+  left: -9999px;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.detail-header-compact-title .compact-top {
+  margin-left: auto;
+}
+
+.back-link,
+.back-link-compact {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: var(--weight-demibold);
+}
+
+.back-link:hover,
+.back-link-compact:hover,
+.back-to-top:hover {
+  font-weight: var(--weight-bold);
+  text-shadow: 0 0 8px var(--accent-soft);
+}
+
+/* Compact arrow-only back link: hidden unless the detail header is collapsed. */
+.back-link-compact {
+  display: none;
+  padding-left: var(--space-8);
+}
+
+.detail-header.compact .back-link-compact {
+  display: inline;
+}
+
+.detail-meta {
+  color: var(--text-muted);
+  font-size: var(--font-size-base);
+}
+
+.detail-lineage {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.detail-tags {
+  display: flex;
+  gap: var(--space-6);
+  margin: var(--space-10) 0;
+}
+
+.tag {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-10);
+  font-size: var(--font-size-sm);
+}
+
+.metrics-table-scroll {
+  overflow-x: auto;
+  /* Shrink-wrap the (fixed-width) table so the shadow hugs it; cap at parent so
+     horizontal scroll still kicks in on narrow viewports. */
+  width: fit-content;
+  max-width: 100%;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+}
+
+.metrics-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  /* Shrink to content so the label column is only as wide as its longest
+     label, not stretched to a fixed total. Long labels grow the table and
+     trip the scroll wrapper's overflow-x instead of inflating the label
+     column. */
+  width: fit-content;
+  /* Shared width for the `this` and `compare` value columns so they stay
+     visually aligned (the compare header holds a fixed-width select; pinning
+     `this` to the same value keeps the two columns equal across iterations). */
+  --metric-value-col-w: 160px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+
+.metrics-table th {
+  padding: 7px var(--space-14);
+  text-align: right;
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--letter-spacing-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.metrics-table th:first-child {
+  text-align: left;
+}
+
+.metrics-table th a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.metrics-table th a:hover {
+  text-decoration: underline;
+}
+
+/* Comparison-column header holds the target dropdown; drop the uppercase/tracking
+   treatment so the (mixed-case) iteration labels read cleanly. Pinned width keeps
+   the column from pushing value cells far from metric labels. */
+.metrics-table th.metric-compare-head {
+  text-transform: none;
+  letter-spacing: normal;
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
+  white-space: nowrap;
+}
+
+/* Right-aligned, borderless select styled to sit inline in the header. Fixed
+   width (with ellipsis for long titles) so switching targets can't resize the
+   select and reflow the column. */
+.compare-select {
+  width: 130px;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--weight-semibold);
+  text-align: left;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.compare-select:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--border) 40%, transparent);
+}
+
+.metrics-table th.metric-compare-head,
+.metrics-table .metric-compare {
+  text-align: left;
+  /* Left padding matches `this`'s right padding so the delta↔compare gap equals
+     the this↔delta gap (delta is centered, so its side slack is symmetric). */
+  padding-left: var(--space-16);
+  width: var(--metric-value-col-w);
+}
+
+/* "delta" column header: centered to match the cells below; min-width floor +
+   zero horizontal padding so the column holds its width, not the pill. */
+.metrics-table th.metric-delta-head {
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+  min-width: 100px;
+}
+
+.metrics-table td {
+  padding: var(--space-8) var(--space-16);
+  border-bottom: 1px solid var(--border);
+}
+
+.metric-section-separator td {
+  padding: var(--space-12) var(--space-16) var(--space-4);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+
+.metrics-table tr:last-child td {
+  border-bottom: none;
+}
+
+.metrics-table .metric-name {
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding-right: var(--space-24);
+}
+
+.metric-baseline {
+  color: var(--text-muted);
+  font-weight: var(--weight-medium);
+}
+
+/* Comparison delta: arrow + percentage, centered in a fixed-width column so the
+   pill's own width can't reflow neighbors when the compare target changes. Zero
+   horizontal padding; the equal side gaps come from the adjacent columns'
+   padding. Tinted good/bad per `higherIsBetter`; a zero change is an empty cell.
+   The chip is max-width-capped so a wide percentage truncates instead of
+   growing the cell — the column holds 100px regardless of value content. */
+.metrics-table .metric-delta {
+  text-align: center;
+  white-space: nowrap;
+  padding-left: 0;
+  padding-right: 0;
+  min-width: 100px;
+}
+
+.metric-delta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-1) var(--space-8);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  max-width: 100px;
+  overflow: hidden;
+}
+
+.metric-delta-chip.good {
+  color: var(--good);
+  background: color-mix(in srgb, var(--good) 15%, transparent);
+}
+
+.metric-delta-chip.bad {
+  color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 15%, transparent);
+}
+
+.metric-delta-arrow {
+  font-size: 9px;
+}
+
+/* Percentage text: truncates with ellipsis when the chip's max-width binds, so
+   a wide percentage clips instead of growing the column. min-width:0 lets the
+   flex item shrink below its content's intrinsic width. */
+.metric-delta-pct {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.metric-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+  width: 1px;
+  white-space: nowrap;
+}
+
+/* `this` right padding sets half the this↔delta gap (matched by compare's left
+   padding for symmetry; delta is centered, adding equal slack on both sides). */
+.metrics-table .metric-value {
+  padding-right: var(--space-16);
+}
+
+/* `this` value: right-aligned in a fixed-width column so value-width changes
+   (navigating iterations) can't reflow the table. Width matches the compare
+   column (`--metric-value-col-w`) so the two value columns read as a pair.
+   Left padding dropped (the value is right-aligned, so left pad is trailing space). */
+.metrics-table .metric-this {
+  width: var(--metric-value-col-w);
+  padding-left: 0;
+}
+
+.table-settings-fold {
+  margin-bottom: var(--space-12);
+}
+
+.table-settings-fold > summary {
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--weight-demibold);
+  color: var(--text-muted);
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.table-settings-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.table-settings-fold > summary::before {
+  content: "▸";
+  transition: transform var(--transition-fast);
+}
+
+.table-settings-fold[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.table-settings-fold > summary:hover {
+  color: var(--text);
+}
+
+.table-settings-fold .metric-filter {
+  margin-top: var(--space-10);
+}
+
+.description-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  box-shadow: var(--shadow);
+}
+
+.description-card .markdown > :first-child {
+  margin-top: 0;
+}
+
+.description-card .markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.artifact {
+  margin: var(--space-10) 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  /* Clear the sticky overview bar when an anchor jump lands on this section. */
+  scroll-margin-top: 64px;
+}
+
+/* Foldable artifact header: the <h3> doubles as the toggle row. Tight margins so
+   a collapsed card reads as a compact title row, not a near-empty box. */
+.artifact-fold {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--weight-bold);
+  line-height: 1.3;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.artifact-chevron {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--accent);
+  transition: transform var(--transition-base);
+}
+
+.artifact-chevron.open {
+  transform: rotate(90deg);
+}
+
+.artifact-body {
+  margin-top: var(--space-10);
+}
+
+/* Plain <pre> fallbacks: oversized code blocks (.code-plain, too large to
+   syntax-highlight responsively) and raw diffs (.raw-diff). */
+.code-plain,
+.raw-diff {
+  background: var(--surface-2);
+  padding: var(--space-12);
+  border-radius: var(--card-inner-radius);
+  overflow: auto;
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-family: var(--font-mono);
+}
+
+/* Artifact table of contents: a SectionCard with its own outer spacing and a
+   list of anchor links. */
+.artifact-toc {
+  margin: var(--space-12) 0 var(--space-4);
+}
+
+.artifact-toc-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6) var(--space-12);
+}
+
+.artifact-toc-links li button {
+  border: none;
+  background: transparent;
+  padding: var(--space-2) 0;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: var(--weight-medium);
+  font-size: var(--font-size-base);
+}
+
+.artifact-toc-links li button:hover {
+  text-decoration: underline;
+}
+
+/* Soft-wrap toggle: override the renderers' default no-wrap for code/diff bodies. */
+.artifact-body.wrap pre,
+.artifact-body.wrap code,
+.artifact-body.wrap .diff-code {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+
+.back-to-top {
+  border: none;
+  background: none;
+  color: var(--accent);
+  padding: 0;
+  cursor: pointer;
+  font-weight: var(--weight-demibold);
+}
+
+/* Island chip: the tag shape filled with the island's graph color; dark text for
+   contrast against the light pastel fills. */
+.island-chip {
+  color: #1b1d27;
+}
+
+/* Generation chip: parent-chain depth, white fill so it reads as a pill against
+   the page background in both themes. */
+.generation-chip {
+  background: #fff;
+  color: #1b1d27;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Markdown */
+.markdown {
+  color: var(--text);
+}
+
+.markdown pre {
+  background: var(--surface-2);
+  padding: var(--space-12);
+  border-radius: var(--radius-xs);
+  overflow: auto;
+}
+
+.markdown code {
+  background: var(--surface-2);
+  padding: var(--space-1) var(--space-5);
+  border-radius: var(--radius-3xs);
+  font-size: 0.9em;
+  font-family: var(--font-mono);
+}
+
+.markdown a {
+  color: var(--accent);
+}
+
+/* react-diff-view theming */
+.diff {
+  font-size: 12.5px;
+  border-radius: var(--card-inner-radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.diff .diff-gutter {
+  color: var(--text-muted);
+}
+
+/* View-options bar (shared across tabs). Surface styling and padding come from
+   the shared card base; only its own layout lives here. */
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-18);
+  font-size: var(--font-size-base);
+  color: var(--text-muted);
+}
+
+/* Graph tab */
+.graph-tab {
+  display: flex;
+  flex-direction: column;
+}
+
+.graph-view {
+  height: calc(100vh - var(--app-header-h, 80px) - 96px);
+  min-height: 360px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.graph-node {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-8);
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.graph-node-id {
+  font-weight: var(--weight-semibold);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-mono);
+}
+
+.graph-node-metric {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-8);
+  font-size: 10.5px;
+  line-height: 16px;
+}
+
+.graph-node-metric-label {
+  opacity: 0.75;
+}
+
+.graph-node-metric-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Home picker */
+.home-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12vh var(--space-24) var(--space-24);
+}
+
+.home-theme-toggle {
+  position: fixed;
+  top: var(--space-16);
+  right: var(--space-24);
+}
+
+.home-card {
+  width: 100%;
+  max-width: 640px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  padding: var(--space-28);
+}
+
+.home-card h1 {
+  margin: 0 0 var(--space-4);
+}
+
+.home-subtitle {
+  margin: 0 0 var(--space-20);
+  color: var(--text-muted);
+}
+
+.home-recent {
+  margin-top: var(--space-24);
+}
+
+.home-recent h2 {
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin: 0 0 var(--space-8);
+}
+
+/* Path autocomplete (shared: home picker + header editor) */
+.path-autocomplete {
+  position: relative;
+  width: 100%;
+}
+
+.path-input-row {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.path-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.path-input {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  padding: var(--space-8) calc(2 * 18px + var(--space-12)) var(--space-8) var(--space-10);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: var(--surface-2);
+}
+
+.path-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--shadow-highlight);
+}
+
+/* Inset icon affordances (clear + history) sitting inside the text box. */
+.path-inset-actions {
+  position: absolute;
+  top: 50%;
+  right: var(--space-6);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.path-inset-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: var(--font-size-2xs);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.path-inset-btn:hover {
+  color: var(--text);
+}
+
+/* Open: the one colored action button, outside the input. */
+.path-icon-btn {
+  flex: none;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-xs);
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.path-open {
+  background: var(--accent);
+  color: var(--text-on-fill);
+}
+
+.path-open:hover:not(:disabled) {
+  background: var(--accent-strong, var(--accent));
+}
+
+.path-icon-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.path-dropdown,
+.path-list {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.path-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 20;
+}
+
+/* Home recents: inset panel inside the card, not a floating dropdown. */
+.path-list {
+  background: var(--surface-2);
+  box-shadow: none;
+}
+
+.path-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+.path-option:hover,
+.path-option.highlighted {
+  background: var(--accent-soft);
+}
+
+.path-option-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.path-option-badge {
+  flex: none;
+  font-family: var(--font-sans, inherit);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: var(--space-1) var(--space-6);
+  border-radius: var(--radius-xs);
+}
+
+/* Header title: run name + datadir path read as one click-to-edit element. The
+   collapsed cluster and the path editor share a single grid cell, so the editor
+   appears in place — same height, same vertical centre — and the two crossfade. */
+.app-title-switch {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.app-title-switch > * {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.app-title-collapsed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+  min-width: 0;
+  max-width: 100%;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.app-title-collapsed:hover .app-datadir {
+  color: var(--text);
+}
+
+.app-title-switch.editing .app-title-collapsed {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app-title-editor {
+  display: flex;
+  align-items: center;
+  max-width: 760px;
+  animation: fade-in var(--transition-fast) ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.home-recent-empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Floating toast notifications (macOS-style, bottom-right) */
+.toast-container {
+  position: fixed;
+  bottom: var(--space-24);
+  right: var(--space-24);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-width: min(420px, calc(100vw - 2 * var(--space-24)));
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+  padding: var(--space-12) var(--space-14);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, var(--radius-sm));
+  background: var(--surface);
+  box-shadow: var(--shadow-lg, var(--shadow));
+  font-size: var(--font-size-sm);
+  pointer-events: auto;
+  animation: toast-in 160ms ease-out;
+}
+
+.toast-error {
+  border-left: 3px solid var(--bad);
+}
+
+.toast-message {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.toast-close {
+  flex: none;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  padding: 0;
+}
+
+.toast-close:hover {
+  color: var(--text);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

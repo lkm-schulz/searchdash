@@ -1,0 +1,24 @@
+id: '0005'
+parent: null
+island: 1
+inspirations: []
+timestamp: '2026-06-09T12:02:00Z'
+title: Constraint-first baseline
+summary: Routing model tuned for OOM safety from the start.
+description: |-
+  ## Constraint-first
+
+  Second independent starting point: a **MultiHead** model whose objective leads with constraint satisfaction rather than raw accuracy. Worse composite than the accuracy stream, but a much lower violation rate to build on.
+metrics:
+  composite: 0.585
+  regret: 0.262
+  constraint: 0.071
+  mae_time_s: 3.62
+  rmse: 6.28
+  r2: 0.682
+  cost: 0.91
+  runtime_s: 305.0
+tags:
+- baseline
+- routing
+artifacts: []

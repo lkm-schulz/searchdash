@@ -1,0 +1,24 @@
+id: 0008
+parent: '0007'
+island: 1
+inspirations:
+- '0006'
+- '0007'
+timestamp: '2026-06-09T13:09:00Z'
+title: Safety-margin calibration
+summary: Calibrate the safety margin on borderline queries.
+description: |-
+  ## Safety-margin calibration
+
+  Tune the decision threshold so borderline queries lean toward the safer engine only when the predicted speedup is marginal. Best constraint score in the constraint stream.
+metrics:
+  composite: 0.672
+  regret: 0.184
+  constraint: 0.038
+  mae_time_s: 2.81
+  rmse: 5.09
+  r2: 0.759
+tags:
+- calibration
+- routing
+artifacts: []

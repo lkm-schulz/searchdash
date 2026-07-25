@@ -1,0 +1,21 @@
+diff --git a/config.yaml b/config.yaml
+index 7a8b9c0..1d2e3f4 100644
+--- a/config.yaml
++++ b/config.yaml
+@@ -1,9 +1,13 @@
+ model:
+   type: MultiHead
+   encoder:
+-    hidden_dim: 128
++    hidden_dim: 256
+   fit:
+-    epochs: 40
++    epochs: 60
++    scheduler:
++      type: cosine
++      warmup_epochs: 5
+     losses:
+       time_s:
+         type: HuberLoss
+         delta: 1.0
+         target_transform: log1p

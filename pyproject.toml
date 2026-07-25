@@ -1,0 +1,64 @@
+[project]
+name = "searchdash"
+version = "0.1.0"
+description = "Read-only web dashboard for per-iteration experiment artifacts: score progressions, change list, diffs, and ad-hoc scatter plots."
+authors = [{ name = "lkm-schulz" }]
+requires-python = ">=3.12,<4"
+readme = "README.md"
+license = "Apache-2.0"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "typer>=0.12",
+    "PyYAML>=6,<7",
+]
+
+[project.scripts]
+searchdash = "searchdash.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["searchdash"]
+
+# Curated run defaults are read at runtime from inside the package, so ship the
+# YAML in the wheel alongside the Python sources.
+[tool.hatch.build.targets.wheel.force-include]
+"searchdash/default_run.yaml" = "searchdash/default_run.yaml"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0,<5",
+    "ruff>=0.14.0,<0.15",
+    "basedpyright>=1.38.4",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    # Complexity
+    "C",
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # Pycodestyle warnings
+    "W",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # import sorting
+    "I",
+]
+
+[tool.pyright]
+# Only typecheck the package; example/ holds sample artifacts (e.g. torch-using
+# program.py) that are not real deps and must not gate the type check.
+include = ["searchdash"]
+exclude = ["**/__pycache__", "**/node_modules", "**/.*", ".venv"]
+typeCheckingMode = "standard"

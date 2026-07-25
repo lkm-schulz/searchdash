@@ -1,0 +1,24 @@
+id: '0012'
+parent: '0011'
+island: 2
+inspirations:
+- '0010'
+- '0011'
+timestamp: '2026-06-09T13:12:00Z'
+title: Boosted ensemble
+summary: Bag several seeds; average engine scores.
+description: |-
+  ## Boosted ensemble
+
+  Bag several seeds and average per-engine scores to cut variance. Best composite in the tree stream and the strongest round-one tabular feature set.
+metrics:
+  composite: 0.712
+  regret: 0.159
+  constraint: 0.074
+  mae_time_s: 2.46
+  rmse: 4.61
+  r2: 0.793
+tags:
+- xgboost
+- ensemble
+artifacts: []

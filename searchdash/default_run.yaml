@@ -1,0 +1,35 @@
+# Curated run defaults, shipped inside searchdash and deep-merged under each
+# datadir's own `run.{json,yaml}` (datadir wins per key). Edit freely: this is
+# the one place to keep metric labels/formats and group names in sync across
+# every run without touching per-run records. Disable with `--no-default-config`.
+# The `totals` list is replaced wholesale when a datadir defines its own.
+
+# Per-metric display metadata, keyed by base name (prefixed variants inherit it).
+# Order here is the canonical metric sort order in the UI.
+metrics:
+  score: { label: Score, higherIsBetter: true }
+  loss: { label: Loss, higherIsBetter: false }
+  accuracy: { label: Accuracy, higherIsBetter: true, format: .3f }
+
+# Named presets, authored by base name; expand client-side to present variants.
+metricSets:
+  Default:
+  - score
+  - loss
+  - accuracy
+  Minimal:
+  - score
+
+defaultMetricSet: Default
+
+# Prefix-group display names. The reserved empty key names the unprefixed group.
+groups:
+  "": { label: General }
+  train: { label: Train }
+  val: { label: Validation }
+
+# Metric-agnostic count of every iteration, regardless of which metrics it carries.
+totals:
+  - label: Iterations
+    aggregation: count
+    format: d

@@ -1,0 +1,33 @@
+id: '0004'
+parent: '0003'
+island: 0
+inspirations:
+- '0002'
+- '0003'
+timestamp: '2026-06-09T13:05:00Z'
+title: Deeper encoder + cosine LR schedule
+summary: 256-dim encoder, cosine decay — best composite so far.
+description: |-
+  ## Capacity + schedule
+
+  Double the encoder width to 256 and switch to a cosine LR schedule with warmup. Both `composite` and `regret` reach their best values across the run while constraint stays low.
+
+  This is the current front-runner.
+metrics:
+  composite: 0.751
+  regret: 0.142
+  constraint: 0.051
+  mae_time_s: 2.33
+  rmse: 4.4
+  r2: 0.812
+artifacts:
+- type: diff
+  path: changes.diff
+  label: Config diff
+- type: file
+  path: config.yaml
+  label: Train config
+  language: yaml
+tags:
+- capacity
+- schedule

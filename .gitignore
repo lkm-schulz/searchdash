@@ -1,0 +1,38 @@
+# Python
+**/__pycache__/
+*.py[cod]
+*$py.class
+**/*.egg-info
+*.so
+
+# Virtual envs
+**/.venv
+**/env/
+**/venv/
+
+# Type/lint caches
+**/.mypy_cache/
+**/.ruff_cache
+**/.pytest_cache
+typings
+
+# Node / frontend build artifacts
+**/node_modules
+**/dist/
+
+# OS / editor
+*.DS_Store
+.vscode/*
+!.vscode/*.code-workspace
+
+# Local agent / harness configs
+.claude/
+.codex/
+.opencode/
+
+# Misc
+**/.env
+**/.python-version
+**/*.log
+**/*.tmp
+site/

@@ -1,0 +1,24 @@
+id: '0013'
+parent: '0004'
+island: 0
+inspirations:
+- 0008
+- '0012'
+timestamp: '2026-06-09T14:02:00Z'
+title: Import constraint + tree elites
+summary: 'Post-shuffle: fold in the other islands'' best ideas.'
+description: |-
+  ## Migration into the accuracy island
+
+  After round one the islands exchange elites. This node continues the accuracy lineage (parent **0004**) but draws on the migrated elites from the constraint island (**0008**) and the tree island (**0012**) — adopting their safety-margin logic and engineered plan features.
+metrics:
+  composite: 0.773
+  regret: 0.128
+  constraint: 0.055
+  mae_time_s: 2.27
+  rmse: 4.28
+  r2: 0.82
+tags:
+- migration
+- hybrid
+artifacts: []

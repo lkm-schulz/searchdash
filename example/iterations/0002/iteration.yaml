@@ -1,0 +1,34 @@
+id: '0002'
+parent: '0001'
+island: 0
+inspirations:
+- '0001'
+timestamp: '2026-06-09T12:18:00Z'
+title: Log-transform the time head
+summary: Predict `log1p(time_s)` to tame the heavy tail.
+description: |-
+  ## Log-transform
+
+  Query runtimes are heavy-tailed; a handful of slow queries dominate the loss. Predicting `log1p(time_s)` and inverting at inference compresses that tail.
+
+  - **composite** ↑ 0.612 → 0.704
+  - **regret** ↓ 0.241 → 0.173
+
+  See the diff for the head change.
+metrics:
+  composite: 0.704
+  regret: 0.173
+  constraint: 0.121
+  mae_time_s: 2.58
+  rmse: 4.77
+  r2: 0.788
+artifacts:
+- type: diff
+  path: changes.diff
+  label: Change diff
+- type: code
+  path: program.py
+  label: Model head
+  language: python
+tags:
+- transform

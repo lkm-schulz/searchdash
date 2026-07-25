@@ -1,0 +1,17 @@
+# gitlint config. Enforces the repo commit convention:
+#   <type>[!](<scope>): <subject>     e.g. feat: ...  or  fix(searchdash): ...
+# and forbids fixed-column hard-wrapping in bodies (custom UC1 rule, see .gitlint-rules/no_hard_wrap.py). 
+# "!" (optional) marks a breaking change.
+
+[general]
+# Load the custom UC1 body-no-hard-wrap rule.
+extra-path=.gitlint-rules
+# B6 (body-is-missing): allow empty body.
+# B1 (body-max-line-length): UC1 forbids fixed-column wrapping instead of capping length.
+# T1 (title-max-length): subjects routinely exceed 72 chars.
+# T5 (title-trailing-whitespace).
+ignore=B6,B1,T1,T5
+
+[title-match-regex]
+# <type>[!](<scope>): <subject>. Scope and "!" are optional.
+regex=^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|init|misc)!?(\([a-z0-9_-]+\))?: \S.*$

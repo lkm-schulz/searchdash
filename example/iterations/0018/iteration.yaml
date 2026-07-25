@@ -1,0 +1,25 @@
+id: 0018
+parent: '0017'
+island: 2
+inspirations:
+- '0007'
+timestamp: '2026-06-09T14:36:00Z'
+title: Hardware-headroom gating
+summary: Gate engine choice on hardware headroom.
+description: |-
+  ## Headroom gating
+
+  Adds the hardware-headroom features from **0007** as a gating signal on engine choice. Best composite in the tree island.
+metrics:
+  composite: 0.765
+  regret: 0.137
+  constraint: 0.06
+  mae_time_s: 2.28
+  rmse: 4.32
+  r2: 0.811
+  cost: 0.73
+  runtime_s: 281.2
+tags:
+- features
+- routing
+artifacts: []

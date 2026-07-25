@@ -1,0 +1,25 @@
+id: '0010'
+parent: 0009
+island: 2
+inspirations:
+- 0009
+timestamp: '2026-06-09T12:27:00Z'
+title: Plan-feature engineering
+summary: Hand-crafted plan aggregates (join depth, scan rows).
+description: |-
+  ## Plan-feature engineering
+
+  Add aggregate plan features — join depth, estimated scan rows, shuffle volume — that the trees split on cleanly. Largest single jump in the tree stream.
+metrics:
+  composite: 0.681
+  regret: 0.179
+  constraint: 0.088
+  mae_time_s: 2.69
+  rmse: 4.95
+  r2: 0.771
+  cost: 0.78
+  runtime_s: 289.4
+tags:
+- features
+- xgboost
+artifacts: []

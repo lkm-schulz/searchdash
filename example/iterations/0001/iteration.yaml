@@ -1,0 +1,33 @@
+id: '0001'
+parent: null
+island: 0
+inspirations: []
+timestamp: '2026-06-09T12:00:00Z'
+title: Baseline MultiHead model
+summary: Initial routing model, no transforms.
+description: |-
+  ## Baseline
+
+  Starting point: a vanilla **MultiHead** model predicting `time_s` per engine with no target transforms and default loss weights.
+
+  This establishes the reference scores subsequent iterations try to beat.
+metrics:
+  composite: 0.612
+  regret: 0.241
+  constraint: 0.118
+  mae_time_s: 3.41
+  rmse: 6.02
+  r2: 0.701
+  cost: 0.84
+  runtime_s: 312.5
+artifacts:
+- type: code
+  path: program.py
+  label: Model head
+  language: python
+- type: file
+  path: config.yaml
+  label: Train config
+  language: yaml
+tags:
+- baseline

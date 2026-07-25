@@ -1,0 +1,70 @@
+name: LCM routing (example)
+metrics:
+  composite:
+    label: Composite
+    higherIsBetter: true
+    format: .3f
+  regret:
+    label: Regret
+    higherIsBetter: false
+    format: .3f
+  constraint:
+    label: Constraint
+    higherIsBetter: false
+    format: .3f
+  mae_time_s:
+    label: MAE time (s)
+    higherIsBetter: false
+    format: .2f
+  rmse:
+    label: RMSE
+    higherIsBetter: false
+    format: .2f
+  r2:
+    label: R²
+    higherIsBetter: true
+    format: .3f
+  cost:
+    label: Eval cost ($)
+    higherIsBetter: false
+    format: .2f
+  runtime_s:
+    label: Eval runtime (s)
+    higherIsBetter: false
+    format: .1f
+metricSets:
+  Default:
+  - composite
+  - regret
+  Routing:
+  - composite
+  - regret
+  - constraint
+  Predictions:
+  - mae_time_s
+  - rmse
+  - r2
+defaultMetricSet: Default
+totals:
+- label: Iterations
+  aggregation: count
+- value: 312.4
+  label: Runtime
+  format: .2f
+  unit: 's '
+  unitPosition: suffix
+- metric: cost
+  label: Total cost
+  aggregation: sum
+  unit: $
+  unitPosition: prefix
+  format: .2f
+- metric: runtime_s
+  label: Total runtime
+  aggregation: sum
+  unit: ' s'
+  unitPosition: suffix
+  format: .1f
+- metric: mae_time_s
+  label: Best MAE time
+  aggregation: min

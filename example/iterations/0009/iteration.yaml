@@ -1,0 +1,22 @@
+id: 0009
+parent: null
+island: 2
+inspirations: []
+timestamp: '2026-06-09T12:04:00Z'
+title: XGBoost baseline
+summary: Gradient-boosted trees over tabular plan features.
+description: |-
+  ## XGBoost baseline
+
+  Third independent starting point: a tree-based regressor over flattened query-plan features, no graph encoder. Strong tabular baseline with a different error profile than the neural streams.
+metrics:
+  composite: 0.64
+  regret: 0.208
+  constraint: 0.097
+  mae_time_s: 3.05
+  rmse: 5.52
+  r2: 0.735
+tags:
+- baseline
+- xgboost
+artifacts: []

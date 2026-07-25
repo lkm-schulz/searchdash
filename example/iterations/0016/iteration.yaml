@@ -1,0 +1,23 @@
+id: '0016'
+parent: '0015'
+island: 1
+inspirations:
+- '0003'
+timestamp: '2026-06-09T14:33:00Z'
+title: Robust loss + safety margin
+summary: Pair Huber loss with the calibrated safety margin.
+description: |-
+  ## Robust + safe
+
+  Folds the Huber-style robust loss from **0003** into the constraint model. Lowest constraint violation of any round-two node.
+metrics:
+  composite: 0.741
+  regret: 0.146
+  constraint: 0.03
+  mae_time_s: 2.41
+  rmse: 4.55
+  r2: 0.799
+tags:
+- loss
+- routing
+artifacts: []

@@ -1,0 +1,23 @@
+id: '0011'
+parent: '0010'
+island: 2
+inspirations:
+- '0010'
+timestamp: '2026-06-09T12:50:00Z'
+title: Monotonic constraints
+summary: Enforce monotonicity on size-correlated features.
+description: |-
+  ## Monotonic constraints
+
+  Constrain the trees to be monotonic in data-size features so larger inputs never predict lower cost. Improves generalization on the long tail.
+metrics:
+  composite: 0.695
+  regret: 0.168
+  constraint: 0.079
+  mae_time_s: 2.57
+  rmse: 4.78
+  r2: 0.781
+tags:
+- xgboost
+- regularization
+artifacts: []

@@ -1,0 +1,24 @@
+id: '0017'
+parent: '0012'
+island: 2
+inspirations:
+- '0004'
+- 0008
+timestamp: '2026-06-09T14:08:00Z'
+title: Import backbone + constraint elites
+summary: 'Post-shuffle: graft neural features onto the tree model.'
+description: |-
+  ## Migration into the tree island
+
+  Continues the tree lineage (parent **0012**) but augments the tabular features with embeddings from the neural backbone (**0004**) and the OOM-penalty signal from **0008**.
+metrics:
+  composite: 0.748
+  regret: 0.149
+  constraint: 0.066
+  mae_time_s: 2.39
+  rmse: 4.5
+  r2: 0.802
+tags:
+- migration
+- xgboost
+artifacts: []

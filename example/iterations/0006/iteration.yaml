@@ -1,0 +1,23 @@
+id: '0006'
+parent: '0005'
+island: 1
+inspirations:
+- '0005'
+timestamp: '2026-06-09T12:24:00Z'
+title: OOM-risk penalty term
+summary: Add an explicit penalty for OOM-prone routes.
+description: |-
+  ## OOM penalty
+
+  Add a differentiable penalty proportional to estimated OOM risk on the chosen engine/hardware. Constraint violations fall further; composite recovers slightly as routing stabilizes.
+metrics:
+  composite: 0.631
+  regret: 0.214
+  constraint: 0.052
+  mae_time_s: 3.18
+  rmse: 5.71
+  r2: 0.724
+tags:
+- loss
+- routing
+artifacts: []

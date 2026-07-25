@@ -1,0 +1,13 @@
+model:
+  type: MultiHead
+  encoder:
+    hidden_dim: 128
+  fit:
+    epochs: 40
+    losses:
+      time_s:
+        type: HuberLoss
+        delta: 1.0
+data:
+  target: time_s
+  normalization: none

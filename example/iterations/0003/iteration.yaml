@@ -1,0 +1,30 @@
+id: '0003'
+parent: '0002'
+island: 0
+inspirations:
+- '0001'
+- '0002'
+timestamp: '2026-06-09T12:41:00Z'
+title: Add constraint-aware loss weighting
+summary: Penalize OOM-risk routes during training.
+description: |-
+  ## Constraint-aware weighting
+
+  Upweight training examples where the chosen engine risks an out-of-memory failure, pushing the router toward safer hardware on borderline queries.
+
+  Composite dips slightly but **constraint** violation drops sharply — a worthwhile trade for production routing.
+metrics:
+  composite: 0.689
+  regret: 0.181
+  constraint: 0.043
+  mae_time_s: 2.71
+  rmse: 4.91
+  r2: 0.776
+artifacts:
+- type: file
+  path: config.yaml
+  label: Train config
+  language: yaml
+tags:
+- loss
+- routing

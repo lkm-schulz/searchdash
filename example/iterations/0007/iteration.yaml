@@ -1,0 +1,23 @@
+id: '0007'
+parent: '0006'
+island: 1
+inspirations:
+- '0006'
+timestamp: '2026-06-09T12:47:00Z'
+title: Hardware-aware features
+summary: Feed per-hardware memory headroom into the encoder.
+description: |-
+  ## Hardware-aware features
+
+  Expose per-hardware memory headroom and worker-count features to the encoder so the router can reason about capacity directly instead of inferring it.
+metrics:
+  composite: 0.658
+  regret: 0.193
+  constraint: 0.044
+  mae_time_s: 2.94
+  rmse: 5.33
+  r2: 0.748
+tags:
+- features
+- routing
+artifacts: []

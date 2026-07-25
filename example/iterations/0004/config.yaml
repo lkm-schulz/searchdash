@@ -1,0 +1,19 @@
+model:
+  type: MultiHead
+  encoder:
+    hidden_dim: 256
+  fit:
+    epochs: 60
+    scheduler:
+      type: cosine
+      warmup_epochs: 5
+    losses:
+      time_s:
+        type: HuberLoss
+        delta: 1.0
+        target_transform: log1p
+    constraint_weighting:
+      oom_risk_weight: 3.0
+data:
+  target: time_s
+  normalization: none
