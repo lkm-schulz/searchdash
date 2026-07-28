@@ -27,15 +27,14 @@ repos:
         args: [--fix, --show-fixes]
       - id: ruff-format
         args: [--diff]
+  - repo: https://github.com/lkm-schulz/dev-hooks
+    rev: v0.1.0
+    hooks:
+      - id: gitlint-no-hard-wrap
   - repo: https://github.com/jorisroovers/gitlint
     rev: v0.19.1
     hooks:
       - id: gitlint
-        name: gitlint
-        language: python
-        entry: gitlint
-        args: [--staged, --msg-filename]
-        stages: [commit-msg]
   - repo: https://github.com/DetachHead/basedpyright-pre-commit-mirror
     rev: 1.38.4
     hooks:
